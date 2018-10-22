@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"lexer"
 	"strconv"
+	"strings"
 	"token"
 )
 
@@ -100,6 +101,8 @@ func (p *Parser) nextToken() {
 
 // ParseProgram parse AST
 func (p *Parser) ParseProgram() *ast.Program {
+	defer untrace(trace("ParseProgram"))
+
 	program := &ast.Program{}
 	program.Statements = []ast.Statement{}
 
@@ -114,6 +117,8 @@ func (p *Parser) ParseProgram() *ast.Program {
 }
 
 func (p *Parser) parseIdentifier() ast.Expression {
+	defer untrace(trace("ParseIdentifier"))
+
 	return &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
 }
 
@@ -129,6 +134,8 @@ func (p *Parser) parseStatement() ast.Statement {
 }
 
 func (p *Parser) parseIntegerLiteral() ast.Expression {
+	defer untrace(trace("ParseIntegerLiteral"))
+
 	lit := &ast.IntegerLiteral{Token: p.curToken}
 
 	value, err := strconv.ParseInt(p.curToken.Literal, 0, 64)
@@ -143,6 +150,8 @@ func (p *Parser) parseIntegerLiteral() ast.Expression {
 }
 
 func (p *Parser) parseLetStatement() *ast.LetStatement {
+	defer untrace(trace("ParseLetStatement"))
+
 	stmt := &ast.LetStatement{Token: p.curToken}
 
 	if !p.expectPeek(token.IDENT) {
@@ -164,6 +173,8 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 }
 
 func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
+	defer untrace(trace("ParseReturnStatement"))
+
 	stmt := &ast.ReturnStatement{Token: p.curToken}
 	p.nextToken()
 
@@ -176,6 +187,8 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 }
 
 func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
+	defer untrace(trace("ParseExpressionStatement"))
+
 	stmt := &ast.ExpressionStatement{
 		Token: p.curToken,
 	}
@@ -190,6 +203,8 @@ func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
 }
 
 func (p *Parser) parseExpression(precedence int) ast.Expression {
+	defer untrace(trace("ParseExpression"))
+
 	prefix := p.prefixParseFns[p.curToken.Type]
 	if prefix == nil {
 		p.noPrefixParseFnError(p.curToken.Type)
@@ -210,6 +225,8 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 }
 
 func (p *Parser) parsePrefixExpression() ast.Expression {
+	defer untrace(trace("ParsePrefixExpresion"))
+
 	expression := &ast.PrefixExpression{
 		Token:    p.curToken,
 		Operator: p.curToken.Literal,
@@ -244,6 +261,8 @@ func (p *Parser) expectPeek(t token.Type) bool {
 }
 
 func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
+	defer untrace(trace("ParseInfixExpression"))
+
 	expression := &ast.InfixExpression{
 		Token:    p.curToken,
 		Operator: p.curToken.Literal,
@@ -282,4 +301,17 @@ func (p *Parser) curPrecedence() int {
 	}
 
 	return LOWEST
+}
+
+var indent = 0
+
+func trace(s string) string {
+	fmt.Printf("%sBEGIN: %s\n", strings.Repeat("  ", indent), s)
+	indent++
+	return s
+}
+
+func untrace(s string) {
+	fmt.Printf("%sEND: %s\n", strings.Repeat("  ", indent-1), s)
+	indent--
 }
