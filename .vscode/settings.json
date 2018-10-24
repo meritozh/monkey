@@ -1,0 +1,10 @@
+{
+  "go.inferGopath": true,
+  "go.liveErrors": {
+    "enabled": true,
+    "delay": 500
+  },
+  "licenser.author": "meritozh",
+  "licenser.license": "MIT",
+  "licenser.projectName": "monkey",
+}
