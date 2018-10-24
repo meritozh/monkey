@@ -1,4 +1,4 @@
 pkg/
 src/github.com/
 
-!.vscode/
+!.gitignore
