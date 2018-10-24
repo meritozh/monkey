@@ -9,9 +9,9 @@
       "type": "go",
       "request": "launch",
       "mode": "test",
-      "program": "${workspaceFolder}/src/parser",
+      "program": "${workspaceFolder}/src/evaluator",
       "env": {},
-      "args": ["-test.run", "TestReturnStatement"]
+      "args": ["-test.run", "TestEvalIntegerExpression"]
     }
   ]
 }
