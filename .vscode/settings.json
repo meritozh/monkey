@@ -4,6 +4,7 @@
     "enabled": true,
     "delay": 500
   },
+  "go.gocodeAutoBuild": true,
   "licenser.author": "meritozh",
   "licenser.license": "MIT",
   "licenser.projectName": "monkey",
