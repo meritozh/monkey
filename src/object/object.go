@@ -36,6 +36,8 @@ const (
 	FUNCTIONOBJ = "FUNCTION"
 	// STRINGOBJ string object
 	STRINGOBJ = "STRING"
+	// BUILTINOBJ bulti-in function
+	BUILTINOBJ = "BUILTIN"
 )
 
 // Integer integer object
@@ -130,3 +132,17 @@ func (s *String) Inspect() string { return s.Value }
 
 // Type implement Object interface
 func (s *String) Type() Type { return STRINGOBJ }
+
+// BuiltinFunction built-in function prototype
+type BuiltinFunction func(args ...Object) Object
+
+// Builtin built-in function
+type Builtin struct {
+	Fn BuiltinFunction
+}
+
+// Inspect implement Object interface
+func (b *Builtin) Inspect() string { return "builtin function" }
+
+// Type implement Object interface
+func (b *Builtin) Type() Type { return BUILTINOBJ }
