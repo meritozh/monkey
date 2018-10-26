@@ -9,9 +9,9 @@
       "type": "go",
       "request": "launch",
       "mode": "test",
-      "program": "${workspaceFolder}/src/evaluator",
+      "program": "${workspaceFolder}/src/parser",
       "env": {},
-      "args": ["-test.run", "TestIfElseExpression"]
+      "args": ["-test.run", "TestCallExpressionParsing"]
     }
   ]
 }

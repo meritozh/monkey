@@ -30,6 +30,9 @@ func TestNextToken(t *testing.T) {
 	10 == 10;
 	10 != 9;
 
+	"foobar"
+	"foo bar"
+
 	&
 	`
 
@@ -133,6 +136,11 @@ func TestNextToken(t *testing.T) {
 		{token.NOTEQ, "!="},
 		{token.INT, "9"},
 		{token.SEMICOLON, ";"},
+
+		// "foobar"
+		{token.STRING, "foobar"},
+		// "foo bar"
+		{token.STRING, "foo bar"},
 
 		// &
 		{token.ILLEGAL, "&"},

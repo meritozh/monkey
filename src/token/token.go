@@ -66,6 +66,9 @@ const (
 	ELSE = "ELSE"
 	// RETURN return keyword
 	RETURN = "RETURN"
+
+	// STRING string literal
+	STRING = "STRING"
 )
 
 // Type string alias
