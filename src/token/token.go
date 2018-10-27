@@ -69,6 +69,10 @@ const (
 
 	// STRING string literal
 	STRING = "STRING"
+	// LBRACKET left bracket
+	LBRACKET = "["
+	// RBRACKET right bracket
+	RBRACKET = "]"
 )
 
 // Type string alias

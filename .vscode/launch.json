@@ -11,7 +11,7 @@
       "mode": "test",
       "program": "${workspaceFolder}/src/parser",
       "env": {},
-      "args": ["-test.run", "TestCallExpressionParsing"]
+      "args": ["-test.run", "TestParsingArrayLiteral"]
     }
   ]
 }
