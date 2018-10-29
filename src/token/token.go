@@ -73,6 +73,8 @@ const (
 	LBRACKET = "["
 	// RBRACKET right bracket
 	RBRACKET = "]"
+	// COLON colon symbol
+	COLON = ":"
 )
 
 // Type string alias

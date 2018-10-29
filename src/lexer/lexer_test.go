@@ -35,6 +35,8 @@ func TestNextToken(t *testing.T) {
 
 	[1, 2];
 
+	{"foo": "bar"}
+
 	&
 	`
 
@@ -151,6 +153,13 @@ func TestNextToken(t *testing.T) {
 		{token.INT, "2"},
 		{token.RBRACKET, "]"},
 		{token.SEMICOLON, ";"},
+
+		// {"foo": "bar"}
+		{token.LBRACE, "{"},
+		{token.STRING, "foo"},
+		{token.COLON, ":"},
+		{token.STRING, "bar"},
+		{token.RBRACE, "}"},
 
 		// &
 		{token.ILLEGAL, "&"},

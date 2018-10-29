@@ -9,6 +9,7 @@ import (
 	"ast"
 	"bytes"
 	"fmt"
+	"hash/fnv"
 	"strings"
 )
 
@@ -38,6 +39,10 @@ const (
 	STRINGOBJ = "STRING"
 	// BUILTINOBJ bulti-in function
 	BUILTINOBJ = "BUILTIN"
+	// ARRAYOBJ array object
+	ARRAYOBJ = "ARRAY"
+	// HASHOBJ hash object
+	HASHOBJ = "HASH"
 )
 
 // Integer integer object
@@ -146,3 +151,94 @@ func (b *Builtin) Inspect() string { return "builtin function" }
 
 // Type implement Object interface
 func (b *Builtin) Type() Type { return BUILTINOBJ }
+
+// Array array object
+type Array struct {
+	Elements []Object
+}
+
+// Inspect implement Object interface
+func (a *Array) Inspect() string {
+	var out bytes.Buffer
+
+	elements := []string{}
+	for _, e := range a.Elements {
+		elements = append(elements, e.Inspect())
+	}
+
+	out.WriteString("[")
+	out.WriteString(strings.Join(elements, ", "))
+	out.WriteString("]")
+
+	return out.String()
+}
+
+// Type implement Object interface
+func (a *Array) Type() Type { return ARRAYOBJ }
+
+// HashKey hash key
+type HashKey struct {
+	Type  Type
+	Value uint64
+}
+
+// HashKey boolean object hashable
+func (b *Boolean) HashKey() HashKey {
+	var value uint64
+
+	if b.Value {
+		value = 1
+	} else {
+		value = 0
+	}
+
+	return HashKey{Type: b.Type(), Value: value}
+}
+
+// HashKey integer object hashable
+func (i *Integer) HashKey() HashKey {
+	return HashKey{Type: i.Type(), Value: uint64(i.Value)}
+}
+
+// HashKey string object hashable
+func (s *String) HashKey() HashKey {
+	h := fnv.New64a()
+	h.Write([]byte(s.Value))
+
+	return HashKey{Type: s.Type(), Value: h.Sum64()}
+}
+
+// HashPair hash object base structure
+type HashPair struct {
+	Key   Object
+	Value Object
+}
+
+// Hash hash object
+type Hash struct {
+	Pairs map[HashKey]HashPair
+}
+
+// Inspect implement Object interface
+func (h *Hash) Inspect() string {
+	var out bytes.Buffer
+
+	pairs := []string{}
+	for _, pair := range h.Pairs {
+		pairs = append(pairs, fmt.Sprintf("%s: %s", pair.Key.Inspect(), pair.Value.Inspect()))
+	}
+
+	out.WriteString("{")
+	out.WriteString(strings.Join(pairs, ", "))
+	out.WriteString("}")
+
+	return out.String()
+}
+
+// Type implement Object interface
+func (h *Hash) Type() Type { return HASHOBJ }
+
+// Hashable hashable interfece
+type Hashable interface {
+	HashKey() HashKey
+}
